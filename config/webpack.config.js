@@ -39,7 +39,7 @@ module.exports = {
 						'@babel/preset-env',
 						'@babel/preset-react'
 					],
-					plugins: [ "dynamic-import-webpack","transform-class-properties","@babel/plugin-proposal-object-rest-spread" ]
+					plugins: [["@babel/plugin-transform-runtime"], "dynamic-import-webpack","transform-class-properties","@babel/plugin-proposal-object-rest-spread" ]
 				  }
 			},
 			{
