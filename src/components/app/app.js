@@ -84,7 +84,7 @@ class App extends Component{
             slides = {this.state.images}
             slidetoshow={4}
             toscroll='3'
-            dur='0.3'
+            dur='1'
             autoplay={false}/>
          </div>
       );
