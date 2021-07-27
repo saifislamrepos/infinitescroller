@@ -81,25 +81,30 @@ class list extends React.Component {
 
 	goto(itr){
 		const dir = itr>this.state.showIndex;
+		if(itr===this.state.showIndex) {
+			return
+		}
 		this.scroll(dir, Math.abs(itr-this.state.showIndex), 1);
 		this.setState({
 			dir: dir,
-			showIndex: itr
+			showIndex: itr,
+			toscrollSlide: 1
 		})
 	}
 
 	
   async scroll(next, itr=0, toscrollSlide){
 	  
-	await this.updatePos(next, toscrollSlide, itr-1);
+	await this.updatePos(next, itr, itr-1);
 	
   }
-	updatePos (next, toscrollSlide, itrval) {
+	updatePos (next, toscrollSlide=0) {
 
 		return new Promise((resolve, reject) => {
 
 			const slidetoshow = parseFloat(this.props.slidetoshow) || 1;
-			const toscroll = parseFloat(this.props.toscroll) || 1;
+			const initToScroll = parseFloat(this.props.toscroll) || 1;
+			const toscroll = toscrollSlide || parseFloat(this.props.toscroll) || 1;
 			const dur = parseFloat(this.props.dur) || 1;
 
 			const imgarr =this.props.slides;
@@ -109,7 +114,7 @@ class list extends React.Component {
 			const renderimg = [...this.state.renderimg];
 			let newarr =[];
 			if(next){
-				newarr = renderimg.slice(toscroll,(slidetoshow+toscroll+1));
+				newarr = renderimg.slice(initToScroll,(slidetoshow+toscroll+1));
 				end = end+toscroll;
 				if(end > len-1) {
 					end = end-len
@@ -127,7 +132,6 @@ class list extends React.Component {
 						startindex:start,
 						endindex:end,
 						isAnimating: true,
-						itrval: itrval,
 						style:{
 							"animationName":'leftMove',
 							"animationDuration": `${dur*1000}ms`
@@ -161,7 +165,6 @@ class list extends React.Component {
 					startindex:start,
 					endindex:end,
 					isAnimating: true,
-					itrval: itrval,
 					style:{
 						"animationName":'rightMove',
 						"animationDuration": `${dur*1000}ms`,
@@ -176,9 +179,9 @@ class list extends React.Component {
 	}
 	componentDidUpdate(prevProp, prevState){
 		if(!this.state.isAnimating) {
-			if(this.props.autoplay || this.state.itrval>0){
+			if(this.props.autoplay){
 				setTimeout(() => {
-					this.scroll.call(this,this.state.dir, this.state.itrval);
+					this.scroll.call(this,true);
 				});
 			
 			}
