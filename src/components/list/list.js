@@ -88,6 +88,7 @@ class list extends React.Component {
 		startindex:startindex,
 		isAnimating: false,
 		dir: true,
+		autoplay: this.props.autoplay,
 		style :{
 			"transform":this.initranslate,
 			"animationDuration": `${dur*1000}ms`,
@@ -110,6 +111,7 @@ class list extends React.Component {
 			showIndex: itr,
 			itrval: itr,
 			isAnimating: true,
+			autoplay: false,
 		},()=>{
 			this.scroll(dir, Math.abs(diff));
 		});
@@ -124,11 +126,9 @@ class list extends React.Component {
 	updatePos (next, itrval) {
 		return new Promise((resolve, reject) => {
 
-			const slidetoshow = parseFloat(this.props.slidetoshow) || 1;
 			const toscroll = parseFloat(this.props.toscroll) || 1;
 			const dur = parseFloat(this.props.dur) || 1;
 			const endScroll = itrval > 0 ? 1 : toscroll;
-			const startScroll = itrval > 0 ? 1 : 0;
 
 			const imgarr =this.props.slides;
 			let start = this.state.startindex;
@@ -213,7 +213,7 @@ class list extends React.Component {
 	}
 	componentDidUpdate(prevProp, prevState){
 		if(!this.state.isAnimating) {
-			if(this.props.autoplay || this.state.itrval>0){
+			if(this.state.autoplay || this.state.itrval>0){
 				setTimeout(() => {
 					this.scroll.call(this,this.state.dir, this.state.itrval);
 				});
@@ -226,7 +226,7 @@ class list extends React.Component {
 	}
 
 	componentDidMount() {
-		if(this.props.autoplay){
+		if(this.state.autoplay){
 			setTimeout(() => {
 				this.scroll.call(this,true);
 			},0);

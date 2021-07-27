@@ -85,7 +85,7 @@ class App extends Component{
             slidetoshow={4}
             toscroll='3'
             dur='1'
-            autoplay={false}/>
+            autoplay={true}/>
          </div>
       );
    }
